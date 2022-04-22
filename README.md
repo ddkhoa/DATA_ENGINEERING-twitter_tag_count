@@ -31,3 +31,6 @@ python app.py
 ```
 
 - Then open your browser and goto: http://localhost:5001 to see the chart :)
+
+## Technologies
+- Python, Spark, PySpark, SparkStreaming, FlaskAPI and HTML/JS
