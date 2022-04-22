@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Top Trending Twitter Hashtags</title>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"
+        integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    <h2>Top Trending Twitter Hashtags</h2>
+    <div style="width:700px;height:500px">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <script>
+
+        const ctx = document.getElementById("chart");
+        const myChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: [
+                    // "a", "b", "c", "d"
+                    {% for item in labels %}
+                    "{{item}}",
+                    {% endfor %}
+                ],
+                datasets: [
+                    {
+                        label: "# of Mentions",
+                        data: [
+                            // 1, 2, 1, 1
+                            {% for item in values %}
+                            {{ item }},
+                            {% endfor %}
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        min: 0
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                }
+            }
+        });
+
+        function refreshData() {
+
+            fetch("/refreshData")
+                .then(resp => resp.json())
+                .then(data => {
+                    myChart.data.labels = data.sLabels;
+                    myChart.data.datasets[0].data = data.sData;
+                    myChart.update();
+                })
+        }
+            setInterval(refreshData, 1000);
+
+    </script>
+</body>
+
+</html>
